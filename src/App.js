@@ -1,18 +1,37 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import RecipeCard from './components/recipe_card'
+
+const API_KEY = '3e0ff2983607fdcc8476627e4065dfca';
+
+
 
 class App extends Component {
+
+    state = {
+        recipes: []
+    }
+
+
+    componentDidMount(){
+        axios.get(`http://food2fork.com/api/search?key=${API_KEY}`)
+            .then(response => {
+                this.setState({recipes: response.data.recipes})
+            })
+    }
+
   render() {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h1>Recipe API Practice</h1>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+
+
+          {this.state.recipes.map(recipe => <RecipeCard key={recipe.recipe_id} data={recipe}/>)}
+
       </div>
     );
   }
